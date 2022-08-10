@@ -1,5 +1,5 @@
 # Hundbloggen
-THis is a blog created with PHP, MySQL, HTML, CSS &amp; JS
+This is a blog created with PHP, MySQL, HTML, CSS &amp; JS
   In this blog the users can: 
   - register
   - login
