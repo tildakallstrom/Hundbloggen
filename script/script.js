@@ -1,5 +1,3 @@
-//Tilda Källström 2021 Webbutveckling 2 Mittuniversitetet
-//Hämta to-the-top-knapp
 mybutton = document.getElementById("topBtn");
 
 function scrollFunction() {
@@ -10,7 +8,6 @@ function scrollFunction() {
   }
 }
 
-// vid klick, scrollas man upp
 function topFunction() {
   document.body.scrollTop = 0; //  Safari
   document.documentElement.scrollTop = 0; // Chrome, Firefox, IE and Opera

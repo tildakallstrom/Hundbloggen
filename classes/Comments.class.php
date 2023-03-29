@@ -1,45 +1,37 @@
-<?php
-//Tilda Källström 2021 Webbutveckling 2 Mittuniversitetet
-class Comments {
-
-    private $db;
-   private $message;
-
-    function __construct()
+    <?php
+    class Comments
     {
-        //connect to db
-        $this->db = new mysqli(DBHOST, DBUSER, DBPASS, DBDATABASE);
-        if ($this->db->connect_errno > 0) {
-            die("Fel vid anslutning: " . $this->db->connect_error);
+        private $db;
+        private $message;
+
+        function __construct()
+        {
+            $this->db = new mysqli(DBHOST, DBUSER, DBPASS, DBDATABASE);
+            if ($this->db->connect_errno > 0) {
+                die("Fel vid anslutning: " . $this->db->connect_error);
+            }
         }
-    }
-        //plocka fram alla comments, visa den nyaste högst upp
+
         public function getComments(): array
         {
             $postid = $_GET['postid'];
             $sql = "SELECT * FROM user JOIN comments on user.username=comments.user join blogposts on blogposts.postid=comments.postid WHERE blogposts.postid = $postid ORDER BY commented DESC; ";
             $result = $this->db->query($sql);
-    
             return mysqli_fetch_all($result, MYSQLI_ASSOC);
         }
 
-
-            public function addComment($username, $postid, $message)
-    {
-        $username = $_SESSION['username'];
-        //postens id
-        $postid = intval($postid);
-        
-        if (!$this->setMessage($message)) {
-            return false;
-        }
-       
-        $sql = "INSERT INTO comments(user, postid, message)VALUES('$username', $postid, '" . $this->message . "');";
-
+        public function addComment($username, $postid, $message)
+        {
+            $username = $_SESSION['username'];
+            $postid = intval($postid);
+            if (!$this->setMessage($message)) {
+                return false;
+            }
+            $sql = "INSERT INTO comments(user, postid, message)VALUES('$username', $postid, '" . $this->message . "');";
             $result = $this->db->query($sql);
             return $result;
-     
         }
+
         public function setMessage($message)
         {
             if (filter_var($message)) {
@@ -51,13 +43,11 @@ class Comments {
                 return false;
             }
         }
-    //radera comment
-            public function deleteComment($commentid)
-            {
-                $commentid = intval($commentid);
-                $sql = "DELETE FROM comments WHERE commentid=$commentid";
-                return $this->db->query($sql);
-            }
 
-           
-}
+        public function deleteComment($commentid)
+        {
+            $commentid = intval($commentid);
+            $sql = "DELETE FROM comments WHERE commentid=$commentid";
+            return $this->db->query($sql);
+        }
+    }

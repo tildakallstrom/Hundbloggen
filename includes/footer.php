@@ -1,4 +1,3 @@
- <!--//Tilda Källström 2021 Webbutveckling 2 Mittuniversitetet footer -->
  <footer>
      <div class="bigfooter">
          <div class='footerright'>

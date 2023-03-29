@@ -1,11 +1,7 @@
 <?php
-//Tilda Källström 2021 Webbutveckling 2 Mittuniversitetet
 include('includes/header.php');
-//kontroll om sessionsvariabel finns
 if (!isset($_SESSION['username']) && (!isset($_SESSION['id']))) {
-    //låt användare registrera sig
 } else {
-    //är användare inloggad redirectas h*n till profile
     header('Location: profile.php');
 }
 ?>
@@ -13,82 +9,78 @@ if (!isset($_SESSION['username']) && (!isset($_SESSION['id']))) {
     <h1 class='h1top'>Registrera användare</h1>
 </div>
 <div class='mainblog'>
-<?php
-//skapa användare
-if(isset($_POST['username'])) {
-    $username = $_POST['username'];
-    $firstname = $_POST['firstname'];
-    $lastname = $_POST['lastname'];
-    $email = $_POST['email'];
-    $password = $_POST['password'];
+    <?php
+    if (isset($_POST['username'])) {
+        $username = $_POST['username'];
+        $firstname = $_POST['firstname'];
+        $lastname = $_POST['lastname'];
+        $email = $_POST['email'];
+        $password = $_POST['password'];
 
-if ($_POST["password"] >= 7) {
-    if ($_POST["password"] === $_POST["confirm_password"]) {
-        $users = new Users();
-        //är användarnamnet registrerat i db?
-        if($users->isUserNameTaken($username)) {
-            $message = "<p class='red'>Namnet är taget!</p>"; }
-//är emailen registrerad i db?
-            elseif($users->isEmailTaken($email)) {
-                $message = "<p class='red'>Denna email finns redan!</p>";
-        } else {
-            if($users->registerUser($username, $firstname, $lastname, $email, $password)) {
-                $message = "<p class='message'>Användare skapad!</p><p class='message'> <a href='login.php' class='btnreg'>Logga in</a></p>";
+        if ($_POST["password"] >= 7) {
+            if ($_POST["password"] === $_POST["confirm_password"]) {
+                $users = new Users();
+                if ($users->isUserNameTaken($username)) {
+                    $message = "<p class='red'>Namnet är taget!</p>";
+                }
+                elseif ($users->isEmailTaken($email)) {
+                    $message = "<p class='red'>Denna email finns redan!</p>";
+                } else {
+                    if ($users->registerUser($username, $firstname, $lastname, $email, $password)) {
+                        $message = "<p class='message'>Användare skapad!</p><p class='message'> <a href='login.php' class='btnreg'>Logga in</a></p>";
+                    } else {
+                        $message = "<p class='red'>Fel vid skapande av användare!</p>";
+                    }
+                }
             } else {
-                $message = "<p class='red'>Fel vid skapande av användare!</p>";
-            } 
+                echo "<p class='red'>Lösenorden matchar inte</p>";
+            }
+        } else {
+            echo "<p class='red'>Lösenordet måste innehålla minst 8 tecken.</p>";
         }
-     } 
- else {
-        echo "<p class='red'>Lösenorden matchar inte</p>";
-     }  
-  
-}   else {
-    echo "<p class='red'>Lösenordet måste innehålla minst 8 tecken.</p>";
-} 
-}
-
-?>
-<div class="loginform">
-<form method="post" class="regform">
-<?php
-if(isset($message)) { echo $message; }
-?>
-<label for="username">Användarnamn:</label>
-<br>
-<input type="text" name="username" class="firstname"  id="username" required>
-<br>
-<label for="firstname">Förnamn:</label>
-<br>
-<input type="text" name="firstname" class="firstname" id="firstname" required>
-<br>
-<label for="lastname">Efternamn:</label>
-<br>
-<input type="text" name="lastname" class="firstname"  id="lastname" required>
-<br>
-<label for="email">Email:</label>
-<br>
-<input type="email" name="email" class="firstname" id="email" required>
-<br>
-<label for="password">Lösenord:</label>
-<br>
-<input type="password" name="password" class="firstname" id="password" required>
-<br>
-<label for="confirm_password">Lösenord igen:</label>
-<br>
-<input type="password" name="confirm_password" class="firstname" id="confirm_password" required>
-<br>
-<input type="checkbox" id="confirm" name="confirm" onchange="confirmSave()">
-<label for="confirm">Jag godkänner att ovanstående uppgifter lagras i syfte för inloggning.</label>
-<br>
-<input type="submit" value="Skapa användarkonto" class="btnreg" id="saveButton" disabled>
-</form>
-</div>
+    }
+    ?>
+    <div class="loginform">
+        <form method="post" class="regform">
+            <?php
+            if (isset($message)) {
+                echo $message;
+            }
+            ?>
+            <label for="username">Användarnamn:</label>
+            <br>
+            <input type="text" name="username" class="firstname" id="username" required>
+            <br>
+            <label for="firstname">Förnamn:</label>
+            <br>
+            <input type="text" name="firstname" class="firstname" id="firstname" required>
+            <br>
+            <label for="lastname">Efternamn:</label>
+            <br>
+            <input type="text" name="lastname" class="firstname" id="lastname" required>
+            <br>
+            <label for="email">Email:</label>
+            <br>
+            <input type="email" name="email" class="firstname" id="email" required>
+            <br>
+            <label for="password">Lösenord:</label>
+            <br>
+            <input type="password" name="password" class="firstname" id="password" required>
+            <br>
+            <label for="confirm_password">Lösenord igen:</label>
+            <br>
+            <input type="password" name="confirm_password" class="firstname" id="confirm_password" required>
+            <br>
+            <input type="checkbox" id="confirm" name="confirm" onchange="confirmSave()">
+            <label for="confirm">Jag godkänner att ovanstående uppgifter lagras i syfte för inloggning.</label>
+            <br>
+            <input type="submit" value="Skapa användarkonto" class="btnreg" id="saveButton" disabled>
+        </form>
+    </div>
 </div>
 <script>
-    //confirm att uppgifter sparas
     function confirmSave() {
-        if(document.getElementById("confirm").checked) {
+        if (document.getElementById("confirm").checked) {
             document.getElementById("saveButton").disabled = false;
         } else {
             document.getElementById("saveButton").disabled = true;
